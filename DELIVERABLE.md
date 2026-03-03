@@ -46,10 +46,24 @@ curl "https://dns-whois-api-production.up.railway.app/v1/lookup?domain=example.c
 
 ## ✅ Deliverable 3: xgate.run Listing
 
-**Status:** API ready for xgate.run discovery
+**Status:** ✅ **Service deployed and ready for xgate.run automated discovery**
 
-**Category:** Infrastructure / Network Tools
-**Tags:** dns, whois, lookup, network, infrastructure, x402
+**Service Information:**
+- **Name:** DNS + WHOIS API
+- **Endpoint:** https://dns-whois-api-production.up.railway.app
+- **Type:** x402-enabled HTTP API
+- **Network:** Base
+- **Category:** Infrastructure / Network Tools
+- **Tags:** dns, whois, lookup, network, infrastructure, domain, x402
+
+**Pricing:**
+- DNS lookup: $0.001 USDC
+- WHOIS lookup: $0.002 USDC
+- Combined lookup: $0.002 USDC
+
+**Health Check:** https://dns-whois-api-production.up.railway.app/health
+
+**Note:** XGate uses automated discovery. The service will be indexed when x402 payments are detected.
 
 ---
 
