@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { resolveDNS, getWhois, getLookup, isValidDomain } from './src/services/dnswhois';
+import { x402DNSMiddleware, x402WhoisMiddleware, x402LookupMiddleware, getX402Manifest } from './src/middleware/x402';
 import type { HealthResponse } from './src/types';
 
 const app = new Hono();
@@ -10,14 +11,19 @@ app.get('/health', (c) => {
   const response: HealthResponse = {
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    version: '1.0.0',
+    version: '1.1.0-x402',
     uptime: Date.now() - startTime,
   };
   return c.json(response);
 });
 
-// GET /v1/dns?domain=&type=A ($0.001)
-app.get('/v1/dns', async (c) => {
+// x402 Manifest endpoint for discovery
+app.get('/.well-known/x402-manifest', (c) => {
+  return c.json(getX402Manifest());
+});
+
+// GET /v1/dns?domain=&type=A (0.01 USDC)
+app.get('/v1/dns', x402DNSMiddleware(), async (c) => {
   const domain = c.req.query('domain');
   const type = c.req.query('type') || 'A';
 
@@ -43,8 +49,8 @@ app.get('/v1/dns', async (c) => {
   return c.json(result);
 });
 
-// GET /v1/whois?domain= ($0.002)
-app.get('/v1/whois', async (c) => {
+// GET /v1/whois?domain= (0.02 USDC)
+app.get('/v1/whois', x402WhoisMiddleware(), async (c) => {
   const domain = c.req.query('domain');
 
   if (!domain) {
@@ -64,8 +70,8 @@ app.get('/v1/whois', async (c) => {
   return c.json(result);
 });
 
-// GET /v1/lookup?domain= combined ($0.002)
-app.get('/v1/lookup', async (c) => {
+// GET /v1/lookup?domain= combined (0.02 USDC)
+app.get('/v1/lookup', x402LookupMiddleware(), async (c) => {
   const domain = c.req.query('domain');
 
   if (!domain) {
